@@ -1,58 +1,57 @@
-import { createClient } from '@supabase/supabase-js'
 import { Suspense } from 'react'
 import useData from '../lib/use-data'
 import { Switch, Case, Default } from 'react-if';
-import moment from 'moment'
+import { format } from 'date-fns'
 import React from 'react'
-const supabaseUrl = 'https://roalneftzccdyalmjdfw.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzNTUyNjY3NywiZXhwIjoxOTUxMTAyNjc3fQ.RTDs1APcLbg3VrHYcrcyao0ocYU8OyU6yPzg0rkLygg'
-console.log('supabaseUrl', supabaseUrl)
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
 const List = () => {
-    const { data } = useData('test', async () => {
-        const result = await supabase.from('articles').select('*')
-        console.log('result', result)
-        return result
+    const { results } = useData('test', () => {
+        return fetch('https://pokeapi.co/api/v2/pokemon?limit=500')
+        .then(response => response.json())
     })
-    const nodes = data?.map((ar, idx) => {
+    const nodes = results.map((ar, idx) => {
         return (
-            <div key={ar.id}>{JSON.stringify(data, null, 2)}</div>
+            <div key={ar.name}><a href={`/demo?articleId=${ar.name}`}>{ar.name}</a></div>
         )
     })
     return nodes
 }
 const Test = (props) => {
     const articleId = props.articleId
-    const { data } = useData(`test-${articleId}`, () => {
-        return supabase.from('articles').select('*').eq('id', articleId).single()
+    const data = useData(`test-${articleId}`, () => {
+        return fetch('https://pokeapi.co/api/v2/pokemon/' + articleId)
+        .then(response => response.json())
     })
-    if (data) {
-        return (
-            <div>{JSON.stringify(data, null, 2)}</div>
-        )
-    } else {
-        return null
-    }
-    
+    return (
+        <div>{JSON.stringify(data, null, 2)}</div>
+    )
 }
-const Main = ({ router }) => {
-    console.log('router', JSON.stringify(router, null, 2))
-    if (router) {
-        return (
-            <>             
-            <Suspense fallback={<div>Loading</div>}>
-            <a href={'/demo'}>All {moment().toDate().toUTCString()}</a>
-            <Switch>
-              <Case condition={router?.query?.articleId}><Test articleId={router?.query?.articleId} /></Case>
-              <Default><List /></Default>
-              </Switch>
-            </Suspense>
-            </>
-        )
-    } else {
-        return null
-    }
-    
+const Main = ({ initialRouter, router = initialRouter }) => {
+    const today = format(new Date(), 'yyyy-mm-dd')
+    return (
+        <>             
+        <Suspense fallback={<div>Loading</div>}>
+        <a href={'/demo'}>All {today}</a>
+        <Switch>
+            <Case condition={router?.query?.articleId}><Test articleId={router?.query?.articleId} /></Case>
+            <Default><List /></Default>
+            </Switch>
+        </Suspense>
+        </>
+    )
 }
 
 export default Main
+
+export const getServerSideProps = async (ctx) => {
+    return {
+        props: {
+            initialRouter: {
+                route: ctx.req.url,
+                asPath: ctx.req.url,
+                pathName: ctx.req.url,
+                query: ctx.query 
+            }
+        }
+    }
+}
