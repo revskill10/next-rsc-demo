@@ -32,11 +32,7 @@ const Main = ({ router }) => {
     return (
         <>             
         <Suspense fallback={<div>Loading</div>}>
-        <a href={'/demo'}>All {today}</a>
-        <Switch>
-            <Case condition={router?.query?.articleId}><Test articleId={router?.query?.articleId} /></Case>
-            <Default><List /></Default>
-            </Switch>
+            <List />
         </Suspense>
         </>
     )
