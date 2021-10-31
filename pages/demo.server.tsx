@@ -1,7 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { Suspense } from 'react'
 import useData from '../lib/use-data'
-import Article from '../components/ArticleMarkdown.server'
 import { Switch, Case, Default } from 'react-if';
 import moment from 'moment'
 import React from 'react'
@@ -17,7 +16,7 @@ const List = () => {
     })
     const nodes = data?.map((ar, idx) => {
         return (
-            <Article key={idx} {...ar} />
+            <div key={ar.id}>{JSON.stringify(data, null, 2)}</div>
         )
     })
     return nodes
@@ -28,7 +27,9 @@ const Test = (props) => {
         return supabase.from('articles').select('*').eq('id', articleId).single()
     })
     if (data) {
-        return <Article {...data} />
+        return (
+            <div>{JSON.stringify(data, null, 2)}</div>
+        )
     } else {
         return null
     }
