@@ -1,9 +1,8 @@
 import { Suspense } from 'react'
-import useData from '../lib/use-data'
 import { format } from 'date-fns'
-import React from 'react'
+import useData from '../lib/use-data'
 import MyTest from '../components/MyTest.client';
-const List = () => {
+const PokmonList = () => {
     const { results } = useData('test', () => {
         return fetch('https://pokeapi.co/api/v2/pokemon?limit=500')
         .then(response => response.json())
@@ -15,13 +14,13 @@ const List = () => {
     })
     return nodes
 }
-
 const Main = () => {
     const today = format(new Date(), 'yyyy-mm-dd')
     return (
         <>             
+        <div><a href={`/demo`}>{today}</a></div>
         <Suspense fallback={<div>Loading</div>}>
-            <List />
+            <PokmonList />
         </Suspense>
         </>
     )
