@@ -16,12 +16,12 @@ const Test = (props) => {
 }
 const Main = ({ initialRouter, router = initialRouter }) => {
     const today = format(new Date(), 'yyyy-mm-dd')
-    if (!router?.params?.articleId) return <div>NOt found</div>
+    if (!router?.query?.articleId) return <div>NOt found</div>
     return (
         <>             
         <div><a href={`/demo`}>{today}</a></div>
         <Suspense fallback={<div>Loading</div>}>
-            <Test articleId={router?.params?.articleId} />
+            <Test articleId={router?.query?.articleId} />
         </Suspense>
         </>
     )
@@ -29,4 +29,4 @@ const Main = ({ initialRouter, router = initialRouter }) => {
 
 export default Main
 
-export const getServerSideProps = useRouter('/demo/:articleId')
+export const getServerSideProps = useRouter('/demo/pokemon')
