@@ -3,7 +3,8 @@ import useData from '../lib/use-data'
 import { Switch, Case, Default } from 'react-if';
 import { format } from 'date-fns'
 import React from 'react'
-
+import Pokemon from '../components/Test.client';
+import MyTest from '../components/MyTest.client';
 const List = () => {
     const { results } = useData('test', () => {
         return fetch('https://pokeapi.co/api/v2/pokemon?limit=500')
@@ -11,7 +12,7 @@ const List = () => {
     })
     const nodes = results.map((ar, idx) => {
         return (
-            <div key={ar.name}><a href={`/demo?articleId=${ar.name}`}>{ar.name}</a></div>
+            <MyTest pokemon={ar} key={ar.name} />
         )
     })
     return nodes
@@ -23,10 +24,10 @@ const Test = (props) => {
         .then(response => response.json())
     })
     return (
-        <div>{JSON.stringify(data, null, 2)}</div>
+       <Pokemon pokemon={data} />
     )
 }
-const Main = ({ initialRouter, router = initialRouter }) => {
+const Main = ({ router }) => {
     const today = format(new Date(), 'yyyy-mm-dd')
     return (
         <>             
@@ -42,16 +43,3 @@ const Main = ({ initialRouter, router = initialRouter }) => {
 }
 
 export default Main
-
-export const getServerSideProps = async (ctx) => {
-    return {
-        props: {
-            initialRouter: {
-                route: ctx.req.url,
-                asPath: ctx.req.url,
-                pathName: ctx.req.url,
-                query: ctx.query 
-            }
-        }
-    }
-}
