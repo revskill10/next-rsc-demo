@@ -19,6 +19,7 @@
     "react": "npm:react@18.0.0-alpha-3c4c1c470-20211021",
     "react-dom": "npm:react-dom@18.0.0-alpha-3c4c1c470-20211021",
     "react-if": "^4.1.1",
+    "react-router-dom": "^5.3.0",
     "sanitize-html": "^2.5.2"
   },
   "resolutions": {
