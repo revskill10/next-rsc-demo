@@ -1,10 +1,19 @@
 import { Suspense } from 'react'
+import useData from '../lib/use-data'
 import { format } from 'date-fns'
 import React from 'react'
-import List from '../components/List.server'
 
-export const config = {
-    unstable_runtimeJS: false
+const List = () => {
+    const { results } = useData('test', () => {
+        return fetch('https://pokeapi.co/api/v2/pokemon?limit=500')
+        .then(response => response.json())
+    })
+    const nodes = results.map((ar, idx) => {
+        return (
+            <div key={ar.name}><a href={`/demo/pokemon?articleId=${ar.name}`}>{ar.name}</a></div>
+        )
+    })
+    return nodes
 }
 
 const Main = () => {

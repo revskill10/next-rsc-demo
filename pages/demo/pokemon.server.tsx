@@ -3,7 +3,6 @@ import useData from '../../lib/use-data'
 import { format } from 'date-fns'
 import React from 'react'
 import Pokemon from '../../components/Test';
-import useRouter from '../../lib/use-router';
 const Test = (props) => {
     const articleId = props.articleId
     const data = useData(`test-${articleId}`, () => {
@@ -14,7 +13,7 @@ const Test = (props) => {
        <Pokemon pokemon={data} />
     )
 }
-const Main = ({ initialRouter, router = initialRouter }) => {
+const Main = ({ router }) => {
     const today = format(new Date(), 'yyyy-mm-dd')
     if (!router?.query?.articleId) return <div>NOt found</div>
     return (
@@ -28,5 +27,3 @@ const Main = ({ initialRouter, router = initialRouter }) => {
 }
 
 export default Main
-
-export const getServerSideProps = useRouter('/demo/pokemon')
