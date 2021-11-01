@@ -1,5 +1,5 @@
 {
-    "rewrites": [
-        { "source": "/pokemon/:pokemonId", "destination": "/demo/pokemon?articleId=:pokemonId" }
+    "routes": [
+        { "src": "/pokemon/(?<pokemonId>[^/]+)", "dest": "/demo/pokemon?articleId=$pokemonId" }
     ]
 }
