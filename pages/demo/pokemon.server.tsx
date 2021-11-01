@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import useData from '../../lib/use-data'
 import { format } from 'date-fns'
 import React from 'react'
-import Pokemon from '../../components/Test.server';
+import Pokemon from '../../components/Test';
 import useRouter from '../../lib/use-router';
 const Test = (props) => {
     const articleId = props.articleId
@@ -28,9 +28,5 @@ const Main = ({ initialRouter, router = initialRouter }) => {
 }
 
 export default Main
-
-export const config = {
-    unstable_runtimeJS: false
-}
 
 export const getServerSideProps = useRouter('/demo/pokemon')
